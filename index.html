@@ -1,110 +1,70 @@
 <!doctype html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#eaf6ff">
-<title>Amir – Fahrrad-Wetter</title>
-<style>
-:root{--ink:#16324f;--muted:#62788f;--good:#18a95d;--gd:#0d8043;--bad:#e0434f;--bd:#b82834;--glass:rgba(255,255,255,.72)}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
-body{min-height:100svh;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at 12% 12%,rgba(255,218,102,.42),transparent 20rem),radial-gradient(circle at 88% 20%,rgba(100,190,255,.35),transparent 24rem),linear-gradient(180deg,#dff3ff,#f8fbff);overflow-x:hidden}
-.sky{position:fixed;inset:0;pointer-events:none;overflow:hidden}
-.cloud{position:absolute;width:190px;height:60px;border-radius:999px;background:rgba(255,255,255,.55);box-shadow:45px -22px 0 12px rgba(255,255,255,.55),100px -8px 0 16px rgba(255,255,255,.55),145px 7px 0 7px rgba(255,255,255,.55);filter:blur(1px);animation:cloud 36s linear infinite}
-.c1{top:10%;left:-280px}.c2{top:55%;left:-360px;animation-duration:46s;transform:scale(.85)}
-@keyframes cloud{to{translate:calc(100vw + 500px) 0}}
-.app{position:relative;width:min(1180px,100%);z-index:1}
-header{text-align:center;margin-bottom:18px}
-.badge{display:inline-block;padding:10px 16px;border-radius:999px;background:var(--glass);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.7);font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#55718d;box-shadow:0 10px 30px rgba(32,70,110,.08)}
-h1{font-size:clamp(2.6rem,6vw,5.4rem);line-height:.92;letter-spacing:-.055em;margin:16px 0 8px}
-header p{margin:0;color:var(--muted);font-weight:800;font-size:clamp(1rem,1.8vw,1.25rem)}
-.card{position:relative;min-height:700px;display:grid;place-items:center;text-align:center;padding:34px;border-radius:44px;background:rgba(255,255,255,.79);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.75);box-shadow:0 35px 90px rgba(35,62,89,.16);overflow:hidden}
-.card.good{background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(223,249,234,.94))}
-.card.bad{background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,229,232,.94))}
-.glow{position:absolute;width:420px;height:420px;right:-120px;top:-150px;border-radius:50%;filter:blur(36px);opacity:.5}
-.good .glow{background:var(--good)}.bad .glow{background:var(--bad)}
-.result{position:relative;width:min(760px,100%);display:flex;flex-direction:column;align-items:center}
-.state{padding:10px 18px;border-radius:999px;font-weight:950;font-size:1.1rem;background:#fff;box-shadow:0 9px 24px rgba(30,60,90,.09);margin-bottom:20px}
-.good .state{color:var(--gd)}.bad .state{color:var(--bd)}
-.bike-wrap{position:relative;width:min(560px,82vw);aspect-ratio:1.48;display:grid;place-items:center}
-.good .bike-wrap{animation:float 2.7s ease-in-out infinite}.bad .bike-wrap{animation:shake 1.4s ease-in-out infinite}
-@keyframes float{50%{transform:translateY(-12px)}}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.bike{width:100%;color:var(--good);filter:drop-shadow(0 16px 22px rgba(13,128,67,.16))}
-.bad .bike{color:var(--bad);filter:drop-shadow(0 16px 22px rgba(184,40,52,.16))}
-.bike *{fill:none;stroke:currentColor;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-.slash{display:none;position:absolute;width:116%;height:25px;border-radius:999px;background:linear-gradient(90deg,var(--bad),var(--bd));transform:rotate(-35deg);box-shadow:0 0 0 9px rgba(255,255,255,.92),0 14px 30px rgba(224,67,79,.24)}
-.bad .slash{display:block}
-.status{font-size:clamp(2.3rem,5vw,4.1rem);font-weight:1000;line-height:.98;letter-spacing:-.05em;margin-top:8px}
-.good .status{color:var(--gd)}.bad .status{color:var(--bd)}
-.reason{max-width:650px;margin:14px 0 0;color:var(--muted);font-size:clamp(1.08rem,1.8vw,1.3rem);font-weight:850;line-height:1.4}
-.info{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:26px}
-.pill{padding:15px;border-radius:22px;background:rgba(255,255,255,.84);border:1px solid rgba(22,50,79,.07);box-shadow:0 9px 24px rgba(30,60,90,.06)}
-.pill small{display:block;text-transform:uppercase;letter-spacing:.06em;font-weight:900;color:#7a8ca0;font-size:.72rem;margin-bottom:4px}.pill b{font-size:1.05rem}
-.loader{width:96px;height:96px;border:10px solid rgba(40,90,140,.12);border-top-color:#3b7cff;border-radius:50%;animation:spin .9s linear infinite;margin-bottom:24px}@keyframes spin{to{transform:rotate(360deg)}}
-.loading-title{font-size:clamp(1.8rem,4vw,3rem);font-weight:1000;letter-spacing:-.04em}.loading-text{color:var(--muted);font-weight:800;margin-top:10px;font-size:1.08rem}
-.location{display:none;width:min(650px,100%);margin-top:22px;padding:16px;border-radius:24px;background:rgba(255,255,255,.82);border:1px solid rgba(22,50,79,.08)}.location.show{display:block}
-.search{display:flex;gap:10px}input{flex:1;min-width:0;border:2px solid #d6e1ec;border-radius:17px;padding:15px 17px;font:inherit;font-weight:850;outline:none;background:white}input:focus{border-color:#6da8ff;box-shadow:0 0 0 5px rgba(109,168,255,.16)}
-button{border:0;border-radius:17px;padding:15px 20px;font:inherit;font-weight:950;color:white;background:linear-gradient(135deg,#2453ff,#3a8dff);box-shadow:0 12px 25px rgba(36,83,255,.22);cursor:pointer}
-footer{text-align:center;margin-top:14px;color:#71859a;font-weight:750;font-size:.84rem}
-@media(max-width:900px){body{padding:14px}.card{min-height:650px;border-radius:32px;padding:24px}.info{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.card{min-height:590px;padding:18px}.info{grid-template-columns:1fr 1fr}.search{flex-direction:column}button{width:100%}}
-@media(orientation:landscape) and (min-width:900px){.card{min-height:590px}.bike-wrap{width:min(470px,54vw)}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#edf7ff">
+  <meta name="description" content="Eine kinderleichte Live-Wetterhilfe fürs Fahrradfahren.">
+  <title>Amir – Fahrrad-Wetter</title>
+  <style>
+    :root { --ink:#122b45; --muted:#61768c; --line:rgba(18,43,69,.10); --blue:#3677ff; --good:#1ba765; --good-dark:#087d47; --bad:#e54d59; --bad-dark:#bd2e3c; --sun:#ffc745; }
+    * { box-sizing:border-box; } html { min-height:100%; background:#eaf6ff; }
+    body { min-height:100svh; margin:0; color:var(--ink); font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif; background:linear-gradient(180deg,#e5f6ff 0%,#f5fbff 55%,#eef8ff 100%); overflow-x:hidden; }
+    button,input { font:inherit; } button { -webkit-tap-highlight-color:transparent; } [hidden] { display:none !important; }.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .sky { position:fixed; inset:0; z-index:-2; overflow:hidden; background:radial-gradient(circle at 9% 8%,rgba(255,201,69,.38),transparent 18rem),radial-gradient(circle at 92% 24%,rgba(70,165,255,.27),transparent 25rem); transition:background .45s ease; }
+    .sky::before,.sky::after { content:""; position:absolute; border-radius:999px; background:rgba(255,255,255,.55); filter:blur(1px); }
+    .sky::before { width:260px; height:64px; top:13%; left:-70px; box-shadow:92px -25px 0 12px rgba(255,255,255,.55),178px 4px 0 7px rgba(255,255,255,.55); animation:drift 30s linear infinite; }
+    .sky::after { width:185px; height:48px; top:58%; right:-55px; opacity:.52; box-shadow:-62px -20px 0 10px rgba(255,255,255,.55),-126px 1px 0 5px rgba(255,255,255,.55); animation:drift-reverse 38s linear infinite; }
+    @keyframes drift { to { transform:translateX(calc(100vw + 420px)); } } @keyframes drift-reverse { to { transform:translateX(calc(-100vw - 340px)); } }
+    .app { width:min(1140px,100%); min-height:100svh; margin:auto; padding:clamp(18px,3vw,38px) clamp(15px,3vw,32px) 22px; display:flex; flex-direction:column; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:clamp(18px,3vw,28px); }
+    .brand { display:flex; align-items:center; gap:12px; min-width:0; }.brand-mark { width:48px; height:48px; flex:0 0 auto; display:grid; place-items:center; border-radius:16px; color:#fff; font-size:1.45rem; background:linear-gradient(145deg,#2e75ff,#62b0ff); box-shadow:0 13px 26px rgba(48,117,255,.25); }
+    .eyebrow { margin:0 0 2px; color:#56738e; font-size:.72rem; line-height:1.1; font-weight:950; letter-spacing:.12em; text-transform:uppercase; }.brand h1 { margin:0; font-size:clamp(1.12rem,2vw,1.48rem); letter-spacing:-.035em; }
+    .today { display:flex; gap:8px; align-items:center; padding:9px 12px; border:1px solid rgba(255,255,255,.78); border-radius:999px; color:#526d87; font-size:.84rem; font-weight:850; background:rgba(255,255,255,.58); box-shadow:0 8px 24px rgba(35,88,126,.07); backdrop-filter:blur(12px); }.today-dot { width:9px; height:9px; border-radius:50%; background:var(--sun); box-shadow:0 0 0 4px rgba(255,199,69,.24); }
+    .card { position:relative; flex:1; min-height:610px; display:grid; place-items:center; overflow:hidden; padding:clamp(22px,4vw,48px); border:1px solid rgba(255,255,255,.84); border-radius:clamp(30px,5vw,48px); background:rgba(255,255,255,.73); box-shadow:0 28px 80px rgba(33,83,120,.16),inset 0 1px rgba(255,255,255,.7); backdrop-filter:blur(20px); }
+    .card::before { content:""; position:absolute; width:460px; height:460px; right:-180px; top:-200px; border-radius:50%; background:radial-gradient(circle,rgba(91,174,255,.20),transparent 67%); pointer-events:none; }.card.good::before { background:radial-gradient(circle,rgba(34,183,108,.22),transparent 67%); }.card.bad::before { background:radial-gradient(circle,rgba(234,85,102,.19),transparent 67%); }
+    .stage { position:relative; width:min(900px,100%); text-align:center; }.loading-icon { width:72px; height:72px; margin:0 auto 20px; display:grid; place-items:center; border-radius:25px; font-size:2rem; background:#fff; box-shadow:0 16px 36px rgba(35,91,130,.12); animation:bob 2.2s ease-in-out infinite; }@keyframes bob { 50% { transform:translateY(-8px) rotate(3deg); } }
+    .loading-title,.idle-title { margin:0; font-size:clamp(2rem,4.4vw,3.65rem); line-height:.98; letter-spacing:-.06em; font-weight:1000; }.loading-text,.idle-text { max-width:530px; margin:14px auto 0; color:var(--muted); font-weight:750; font-size:clamp(1rem,1.7vw,1.2rem); line-height:1.45; }
+    .result-grid { display:grid; grid-template-columns:minmax(300px,1.1fr) minmax(290px,.9fr); align-items:center; gap:clamp(26px,5vw,76px); text-align:left; }.result-copy { min-width:0; }.state { display:inline-flex; align-items:center; gap:8px; margin-bottom:14px; padding:9px 13px; border-radius:999px; color:var(--good-dark); font-size:.9rem; font-weight:950; background:rgba(27,167,101,.11); }.bad .state { color:var(--bad-dark); background:rgba(229,77,89,.11); }
+    .status { margin:0; color:var(--good-dark); font-size:clamp(2.65rem,5.4vw,5rem); line-height:.92; letter-spacing:-.068em; font-weight:1000; }.bad .status { color:var(--bad-dark); }.reason { max-width:500px; margin:16px 0 0; color:var(--muted); font-size:clamp(1.05rem,1.9vw,1.3rem); line-height:1.42; font-weight:780; }
+    .info { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:24px; }.pill { min-width:0; padding:13px 14px; border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.73); box-shadow:0 8px 22px rgba(34,77,111,.05); }.pill small { display:block; overflow:hidden; color:#71869a; font-size:.67rem; font-weight:950; letter-spacing:.08em; text-overflow:ellipsis; text-transform:uppercase; white-space:nowrap; }.pill b { display:block; overflow:hidden; margin-top:4px; color:#24435e; font-size:1rem; text-overflow:ellipsis; white-space:nowrap; }
+    .bike-scene { position:relative; width:100%; aspect-ratio:1.2; min-height:250px; display:grid; place-items:center; isolation:isolate; }.bike-scene::before { content:""; position:absolute; z-index:-1; width:88%; aspect-ratio:1; border-radius:50%; background:radial-gradient(circle at 48% 38%,rgba(255,255,255,.98),rgba(232,247,255,.75) 48%,rgba(106,195,255,.16) 70%,transparent 71%); }.good .bike-scene { animation:float 3s ease-in-out infinite; }.bad .bike-scene { animation:soft-shake 2.2s ease-in-out infinite; }@keyframes float { 50% { transform:translateY(-12px); } }@keyframes soft-shake { 20%,80% { transform:rotate(0deg); } 35% { transform:rotate(-1.2deg); } 55% { transform:rotate(1.2deg); } }
+    .bike { width:100%; max-width:460px; filter:drop-shadow(0 24px 20px rgba(10,68,94,.16)); }.bike .tire { fill:#152634; }.bike .rim { fill:#f8fbfc; stroke:#a7bac6; stroke-width:4; }.bike .hub { fill:#607988; }.bike .spoke { stroke:#b7c6cf; stroke-width:2; }.bike .frame { fill:none; stroke:#228ade; stroke-width:12; stroke-linecap:round; stroke-linejoin:round; }.bike .fork { fill:none; stroke:#2d475b; stroke-width:9; stroke-linecap:round; }.bike .metal { fill:none; stroke:#5f7788; stroke-width:8; stroke-linecap:round; stroke-linejoin:round; }.bike .seat { fill:#17222d; }.bike .reflect { fill:#ffc83f; }.bike .light { fill:#fff4bf; stroke:#e5b725; stroke-width:3; }.bad .bike .frame { stroke:#e25360; }.bad .bike-scene::after { content:""; position:absolute; width:113%; height:24px; border-radius:999px; background:linear-gradient(90deg,#f15a66,#c62c3c); transform:rotate(-35deg); box-shadow:0 0 0 8px rgba(255,255,255,.92),0 13px 24px rgba(196,43,58,.25); }
+    .location { width:min(590px,100%); margin:28px auto 0; padding:8px; border:1px solid var(--line); border-radius:23px; background:rgba(255,255,255,.76); box-shadow:0 14px 32px rgba(34,77,111,.08); }.search { display:flex; gap:8px; }input { width:100%; min-width:0; border:2px solid transparent; border-radius:17px; padding:15px 16px; color:var(--ink); font-weight:800; outline:0; background:rgba(242,248,252,.92); }input::placeholder { color:#8090a0; }input:focus { border-color:#80adff; background:#fff; box-shadow:0 0 0 4px rgba(54,119,255,.13); }button { flex:0 0 auto; min-height:52px; padding:0 20px; border:0; border-radius:17px; color:#fff; font-weight:950; cursor:pointer; background:linear-gradient(135deg,#316eff,#55a6ff); box-shadow:0 10px 20px rgba(49,110,255,.24); transition:transform .18s ease,box-shadow .18s ease; }button:hover { transform:translateY(-2px); box-shadow:0 14px 25px rgba(49,110,255,.31); }button:active { transform:translateY(0) scale(.98); }.tip { margin:13px 0 0; color:#73889a; font-size:.82rem; font-weight:750; }
+    footer { display:flex; justify-content:space-between; gap:12px; padding:16px 4px 0; color:#6e8497; font-size:.79rem; font-weight:750; }.weather-night { background:radial-gradient(circle at 18% 10%,rgba(117,104,226,.32),transparent 21rem),linear-gradient(180deg,#233c66,#ddecf5 95%); }.weather-rain { background:radial-gradient(circle at 20% 15%,rgba(111,140,183,.42),transparent 24rem),linear-gradient(180deg,#bdd4e6,#eff7fc 88%); }.weather-snow { background:radial-gradient(circle at 14% 14%,rgba(255,255,255,.78),transparent 20rem),linear-gradient(180deg,#dfeefa,#fbfdff 88%); }
+    @media (max-width:720px) { .app { padding:16px 13px 18px; }.today { padding:8px 10px; font-size:.76rem; }.today span:last-child { display:none; }.brand-mark { width:43px; height:43px; border-radius:14px; }.card { min-height:calc(100svh - 125px); padding:25px 20px; }.result-grid { grid-template-columns:1fr; gap:9px; text-align:center; }.result-copy { order:2; }.bike-scene { max-width:370px; margin:auto; min-height:210px; }.reason { margin-left:auto; margin-right:auto; }.info { max-width:480px; margin-left:auto; margin-right:auto; text-align:left; }footer { justify-content:center; text-align:center; }footer span:last-child { display:none; } }
+    @media (max-width:410px) { .today { display:none; }.card { min-height:calc(100svh - 100px); }.loading-title,.idle-title { font-size:2.1rem; }.status { font-size:2.9rem; }.search { flex-direction:column; }button { width:100%; } }
+    @media (orientation:landscape) and (min-width:780px) and (max-height:760px) { .app { padding-top:18px; padding-bottom:12px; }header { margin-bottom:14px; }.card { min-height:520px; }.bike-scene { min-height:235px; }.info { margin-top:18px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } }
+  </style>
 </head>
 <body>
-<div class="sky" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div></div>
-<main class="app">
-<header><span class="badge">Amir · Fahrrad-Wetter</span><h1>Kann ich heute<br>Fahrrad fahren?</h1><p>Die Seite prüft das Wetter automatisch.</p></header>
-<section id="card" class="card" aria-live="polite">
-<div class="glow"></div>
-<div id="loading"><div class="loader"></div><div class="loading-title">Wetter wird geprüft …</div><div class="loading-text">Standort erlauben – dann siehst du sofort das Ergebnis.</div></div>
-<div id="result" class="result" hidden>
-<div id="state" class="state"></div>
-<div class="bike-wrap" aria-hidden="true">
-<svg class="bike" viewBox="0 0 420 290">
-<circle cx="95" cy="205" r="65"/><circle cx="325" cy="205" r="65"/>
-<path d="M95 205 165 205 212 132 275 205 325 205M165 205 135 120 205 120M135 120 112 120M212 132 250 95M235 96 275 96M212 132 165 205M212 132 275 205"/>
-</svg><div class="slash"></div></div>
-<div id="status" class="status"></div><p id="reason" class="reason"></p><div id="info" class="info"></div>
-</div>
-<div id="location" class="location"><div class="search"><input id="city" placeholder="Ort eingeben, z. B. Ludwigsburg" autocomplete="address-level2"><button id="go">Prüfen</button></div></div>
-</section>
-<footer>Live-Wetter über Open-Meteo · einfache Wetterhilfe für Kinder</footer>
-</main>
-<script>
-const $=id=>document.getElementById(id),card=$("card"),loading=$("loading"),result=$("result"),state=$("state"),statusEl=$("status"),reason=$("reason"),info=$("info"),locationBox=$("location"),city=$("city"),go=$("go");
-const textCode=c=>c===0?"Klar":[1,2,3].includes(c)?"Wolkig":[45,48].includes(c)?"Nebel":[51,53,55,56,57].includes(c)?"Nieselregen":[61,63,65,66,67,80,81,82].includes(c)?"Regen":[71,73,75,77,85,86].includes(c)?"Schnee":[95,96,99].includes(c)?"Gewitter":"Wechselhaft";
-function decide(w,next){
- const c=+w.weather_code||0,p=+w.precipitation||0,r=+w.rain||0,s=+w.showers||0,snow=+w.snowfall||0,wind=+w.wind_speed_10m||0,t=+w.temperature_2m||0;
- const soonRain=next.some(x=>(+x.precipitation||0)>=.2 || (+x.precipitation_probability||0)>=60);
- if([95,96,99].includes(c))return[false,"Gewitter","Heute lieber nicht – Gewitter ist zu gefährlich."];
- if(snow>0||[71,73,75,77,85,86].includes(c))return[false,"Schnee oder Glätte","Heute lieber nicht – es kann rutschig sein."];
- if(p>0||r>0||s>0||[51,53,55,56,57,61,63,65,66,67,80,81,82].includes(c)||soonRain)return[false,"Regen","Heute lieber nicht – es ist nass oder bald kommt Regen."];
- if(wind>=30)return[false,"Starker Wind","Heute lieber nicht – der Wind ist zu stark."];
- if(t<=2)return[false,"Sehr kalt","Heute lieber nicht – es ist sehr kalt."];
- return[true,"Gutes Fahrrad-Wetter","Ja! Das Wetter passt gerade zum Fahrradfahren."];
-}
-function pill(a,b){return '<div class="pill"><small>'+a+'</small><b>'+b+'</b></div>'}
-function esc(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
-function render(w,next,place){
- const d=decide(w,next);loading.hidden=true;result.hidden=false;card.className="card "+(d[0]?"good":"bad");
- state.textContent=d[0]?"✅ Fahrrad geht":"⛔ Lieber nicht";statusEl.textContent=d[0]?"Ja, Fahrrad fahren!":"Heute lieber nicht.";reason.textContent=d[2];
- info.innerHTML=pill("Ort",esc(place))+pill("Temperatur",Math.round(+w.temperature_2m)+" °C")+pill("Wind",Math.round(+w.wind_speed_10m)+" km/h")+pill("Wetter",textCode(+w.weather_code));
-}
-async function weather(lat,lon,place){
- const u=new URL("https://api.open-meteo.com/v1/forecast");u.search=new URLSearchParams({latitude:lat,longitude:lon,current:"temperature_2m,precipitation,rain,showers,snowfall,weather_code,wind_speed_10m",hourly:"precipitation,precipitation_probability",forecast_hours:"3",timezone:"auto"});
- const res=await fetch(u);if(!res.ok)throw Error("Wetter nicht verfügbar");const d=await res.json();
- const next=(d.hourly?.time||[]).map((_,i)=>({precipitation:d.hourly.precipitation?.[i],precipitation_probability:d.hourly.precipitation_probability?.[i]})).slice(0,3);
- render(d.current,next,place);
-}
-function fallback(msg){loading.innerHTML='<div class="loading-title">Wo bist du?</div><div class="loading-text">'+msg+'</div>';locationBox.classList.add("show")}
-async function search(){
- const q=city.value.trim();if(!q)return;go.disabled=true;go.textContent="…";
- try{const u=new URL("https://geocoding-api.open-meteo.com/v1/search");u.search=new URLSearchParams({name:q,count:"1",language:"de",format:"json"});const r=await fetch(u),d=await r.json(),h=d.results?.[0];if(!h)throw Error("Ort nicht gefunden");await weather(h.latitude,h.longitude,[h.name,h.admin1].filter(Boolean).join(", "));locationBox.classList.remove("show")}catch(e){alert(e.message||"Ort nicht gefunden")}finally{go.disabled=false;go.textContent="Prüfen"}
-}
-go.onclick=search;city.addEventListener("keydown",e=>{if(e.key==="Enter")search()});
-if("geolocation"in navigator)navigator.geolocation.getCurrentPosition(p=>weather(p.coords.latitude,p.coords.longitude,"Bei dir").catch(()=>fallback("Wetter konnte nicht geladen werden. Gib deinen Ort ein.")),()=>fallback("Standort nicht freigegeben. Gib deinen Ort ein."),{enableHighAccuracy:false,timeout:8000,maximumAge:600000});else fallback("Gib deinen Ort ein.");
-</script>
+  <div id="sky" class="sky" aria-hidden="true"></div>
+  <main class="app">
+    <header><div class="brand"><div class="brand-mark" aria-hidden="true">🚲</div><div><p class="eyebrow">Amirs Helfer</p><h1>Fahrrad-Wetter</h1></div></div><div class="today"><span class="today-dot"></span><span id="date">Heute</span></div></header>
+    <section id="card" class="card" aria-live="polite" aria-busy="true">
+      <div id="loading" class="stage"><div class="loading-icon" aria-hidden="true">☀️</div><h2 class="loading-title">Wetter wird geprüft …</h2><p class="loading-text">Einen Moment – dann weißt du, ob dein Fahrrad heute raus darf.</p></div>
+      <div id="idle" class="stage" hidden><div class="loading-icon" aria-hidden="true">📍</div><h2 class="idle-title">Wo soll es losgehen?</h2><p id="idle-text" class="idle-text">Gib deinen Ort ein. Danach bekommst du sofort die Fahrrad-Antwort.</p></div>
+      <div id="result" class="stage" hidden><div class="result-grid"><div class="result-copy"><div id="state" class="state"></div><h2 id="status" class="status"></h2><p id="reason" class="reason"></p><div id="info" class="info"></div></div><div class="bike-scene" aria-hidden="true">
+        <svg class="bike" viewBox="0 0 540 370" role="img"><title>Fahrrad</title><ellipse cx="158" cy="265" rx="87" ry="87" class="tire"/><ellipse cx="382" cy="265" rx="87" ry="87" class="tire"/><circle cx="158" cy="265" r="72" class="rim"/><circle cx="382" cy="265" r="72" class="rim"/><g class="spoke"><path d="M158 193v144M86 265h144M107 214l102 102M209 214 107 316M382 193v144M310 265h144M331 214l102 102M433 214 331 316"/></g><circle cx="158" cy="265" r="8" class="hub"/><circle cx="382" cy="265" r="8" class="hub"/><path d="M158 265 235 265 291 151 382 265 235 265 187 153 267 153 291 151" class="frame"/><path d="M291 151 338 103M338 103 374 103M338 103l-13-27M187 153l-30 0M187 153 174 127" class="metal"/><path d="M291 151 382 265M235 265 291 151" class="frame"/><path d="M382 265 338 103" class="fork"/><path d="M151 120h60q12 0 13 12l-2 8h-72z" class="seat"/><path d="M182 153 181 135" class="metal"/><path d="M310 76h46" class="metal"/><path d="M330 76q5-20 23-20" class="metal"/><path d="M235 265 254 293M264 293h-28" class="metal"/><path d="M139 171q19-13 39 0M366 171q19-13 39 0" class="metal"/><rect x="117" y="168" width="15" height="18" rx="4" class="reflect"/><circle cx="359" cy="92" r="12" class="light"/></svg>
+      </div></div></div>
+      <form id="location" class="location" hidden><div class="search"><label class="sr-only" for="city">Ort</label><input id="city" placeholder="Ort eingeben, z. B. Ludwigsburg" autocomplete="address-level2" enterkeyhint="go"><button id="go" type="submit">Wetter prüfen</button></div><p class="tip">Dein Standort wird nur für diese Wetterabfrage benutzt.</p></form>
+    </section>
+    <footer><span>Live-Wetter von Open-Meteo</span><span>Für kleine und große Fahrrad-Abenteuer</span></footer>
+  </main>
+  <script>
+    const $=id=>document.getElementById(id),card=$("card"),loading=$("loading"),idle=$("idle"),idleText=$("idle-text"),result=$("result"),state=$("state"),statusEl=$("status"),reason=$("reason"),info=$("info"),locationBox=$("location"),city=$("city"),go=$("go"),sky=$("sky");
+    $("date").textContent=new Intl.DateTimeFormat("de-DE",{weekday:"long",day:"numeric",month:"short"}).format(new Date());
+    const weatherName=code=>code===0?"Sonnig":[1,2,3].includes(code)?"Wolkig":[45,48].includes(code)?"Nebel":[51,53,55,56,57].includes(code)?"Nieselregen":[61,63,65,66,67,80,81,82].includes(code)?"Regen":[71,73,75,77,85,86].includes(code)?"Schnee":[95,96,99].includes(code)?"Gewitter":"Wechselhaft";
+    const weatherIcon=code=>code===0?"☀️":[1,2,3].includes(code)?"⛅":[45,48].includes(code)?"🌫️":[51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)?"🌧️":[71,73,75,77,85,86].includes(code)?"❄️":[95,96,99].includes(code)?"⛈️":"🌤️";
+    function decide(w,next){const c=+w.weather_code||0,p=+w.precipitation||0,r=+w.rain||0,s=+w.showers||0,snow=+w.snowfall||0,wind=+w.wind_speed_10m||0,t=+w.temperature_2m||0,soon=next.some(x=>(+x.precipitation||0)>=.2||(+x.precipitation_probability||0)>=60);if([95,96,99].includes(c))return[false,"Gewitter","Heute lieber nicht – Gewitter ist fürs Fahrrad zu gefährlich."];if(snow>0||[71,73,75,77,85,86].includes(c))return[false,"Schnee oder Glätte","Heute lieber nicht – die Straße kann rutschig sein."];if(p>0||r>0||s>0||[51,53,55,56,57,61,63,65,66,67,80,81,82].includes(c)||soon)return[false,"Regen","Heute lieber nicht – es ist nass oder bald kommt Regen."];if(wind>=30)return[false,"Starker Wind","Heute lieber nicht – der Wind ist zu stark."];if(t<=2)return[false,"Sehr kalt","Heute lieber nicht – es ist sehr kalt und kann glatt sein."];return[true,"Gutes Fahrrad-Wetter","Ja! Wetter, Temperatur und Wind passen gerade gut zum Fahrradfahren."];}
+    function pill(label,value){return '<div class="pill"><small>'+label+'</small><b>'+value+'</b></div>';}function esc(value){return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+    function setSky(code,isDay){sky.className="sky"+(isDay?"":" weather-night")+([61,63,65,66,67,80,81,82,95,96,99].includes(code)?" weather-rain":"")+([71,73,75,77,85,86].includes(code)?" weather-snow":"");}
+    function showIdle(message){card.className="card";card.setAttribute("aria-busy","false");loading.hidden=true;result.hidden=true;idle.hidden=false;idleText.textContent=message;locationBox.hidden=false;city.focus({preventScroll:true});}
+    function render(w,next,place){const d=decide(w,next),code=+w.weather_code||0;card.className="card "+(d[0]?"good":"bad");card.setAttribute("aria-busy","false");loading.hidden=true;idle.hidden=true;result.hidden=false;locationBox.hidden=false;state.textContent=(d[0]?"✅ Fahrrad geht":"⛔ Lieber nicht")+" · "+d[1];statusEl.textContent=d[0]?"Ja, losfahren!":"Heute besser nicht.";reason.textContent=d[2];info.innerHTML=pill("Ort",esc(place))+pill("Temperatur",Math.round(+w.temperature_2m)+" °C")+pill("Wind",Math.round(+w.wind_speed_10m)+" km/h")+pill("Wetter",weatherIcon(code)+" "+weatherName(code));setSky(code,w.is_day!==0);}
+    async function weather(lat,lon,place){const url=new URL("https://api.open-meteo.com/v1/forecast");url.search=new URLSearchParams({latitude:lat,longitude:lon,current:"temperature_2m,precipitation,rain,showers,snowfall,weather_code,wind_speed_10m,is_day",hourly:"precipitation,precipitation_probability",forecast_hours:"3",timezone:"auto"});const response=await fetch(url);if(!response.ok)throw Error("Wetter nicht verfügbar");const data=await response.json(),next=(data.hourly?.time||[]).map((_,i)=>({precipitation:data.hourly.precipitation?.[i],precipitation_probability:data.hourly.precipitation_probability?.[i]})).slice(0,3);render(data.current,next,place);}
+    async function search(event){event?.preventDefault();const query=city.value.trim();if(!query){city.focus();return;}go.disabled=true;go.textContent="Prüfe …";try{const url=new URL("https://geocoding-api.open-meteo.com/v1/search");url.search=new URLSearchParams({name:query,count:"1",language:"de",format:"json"});const response=await fetch(url),data=await response.json(),hit=data.results?.[0];if(!hit)throw Error("Ort nicht gefunden");await weather(hit.latitude,hit.longitude,[hit.name,hit.admin1].filter(Boolean).join(", "));city.blur();}catch(error){showIdle(error.message||"Das Wetter konnte gerade nicht geladen werden. Versuch es noch einmal.");}finally{go.disabled=false;go.textContent="Wetter prüfen";}}
+    locationBox.addEventListener("submit",search);if("geolocation"in navigator)navigator.geolocation.getCurrentPosition(p=>weather(p.coords.latitude,p.coords.longitude,"Bei dir").catch(()=>showIdle("Das Wetter konnte nicht geladen werden. Gib deinen Ort ein.")),()=>showIdle("Standort nicht freigegeben. Gib einfach deinen Ort ein."),{enableHighAccuracy:false,timeout:8000,maximumAge:600000});else showIdle("Dein Browser kann keinen Standort senden. Gib deinen Ort ein.");
+  </script>
 </body>
 </html>
