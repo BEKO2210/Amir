@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#eaf6ff">
+<title>Amir – Fahrrad-Wetter</title>
+<style>
+:root{--ink:#16324f;--muted:#62788f;--good:#18a95d;--gd:#0d8043;--bad:#e0434f;--bd:#b82834;--glass:rgba(255,255,255,.72)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+body{min-height:100svh;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at 12% 12%,rgba(255,218,102,.42),transparent 20rem),radial-gradient(circle at 88% 20%,rgba(100,190,255,.35),transparent 24rem),linear-gradient(180deg,#dff3ff,#f8fbff);overflow-x:hidden}
+.sky{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.cloud{position:absolute;width:190px;height:60px;border-radius:999px;background:rgba(255,255,255,.55);box-shadow:45px -22px 0 12px rgba(255,255,255,.55),100px -8px 0 16px rgba(255,255,255,.55),145px 7px 0 7px rgba(255,255,255,.55);filter:blur(1px);animation:cloud 36s linear infinite}
+.c1{top:10%;left:-280px}.c2{top:55%;left:-360px;animation-duration:46s;transform:scale(.85)}
+@keyframes cloud{to{translate:calc(100vw + 500px) 0}}
+.app{position:relative;width:min(1180px,100%);z-index:1}
+header{text-align:center;margin-bottom:18px}
+.badge{display:inline-block;padding:10px 16px;border-radius:999px;background:var(--glass);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.7);font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#55718d;box-shadow:0 10px 30px rgba(32,70,110,.08)}
+h1{font-size:clamp(2.6rem,6vw,5.4rem);line-height:.92;letter-spacing:-.055em;margin:16px 0 8px}
+header p{margin:0;color:var(--muted);font-weight:800;font-size:clamp(1rem,1.8vw,1.25rem)}
+.card{position:relative;min-height:700px;display:grid;place-items:center;text-align:center;padding:34px;border-radius:44px;background:rgba(255,255,255,.79);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.75);box-shadow:0 35px 90px rgba(35,62,89,.16);overflow:hidden}
+.card.good{background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(223,249,234,.94))}
+.card.bad{background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,229,232,.94))}
+.glow{position:absolute;width:420px;height:420px;right:-120px;top:-150px;border-radius:50%;filter:blur(36px);opacity:.5}
+.good .glow{background:var(--good)}.bad .glow{background:var(--bad)}
+.result{position:relative;width:min(760px,100%);display:flex;flex-direction:column;align-items:center}
+.state{padding:10px 18px;border-radius:999px;font-weight:950;font-size:1.1rem;background:#fff;box-shadow:0 9px 24px rgba(30,60,90,.09);margin-bottom:20px}
+.good .state{color:var(--gd)}.bad .state{color:var(--bd)}
+.bike-wrap{position:relative;width:min(560px,82vw);aspect-ratio:1.48;display:grid;place-items:center}
+.good .bike-wrap{animation:float 2.7s ease-in-out infinite}.bad .bike-wrap{animation:shake 1.4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px)}}@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.bike{width:100%;color:var(--good);filter:drop-shadow(0 16px 22px rgba(13,128,67,.16))}
+.bad .bike{color:var(--bad);filter:drop-shadow(0 16px 22px rgba(184,40,52,.16))}
+.bike *{fill:none;stroke:currentColor;stroke-width:12;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.slash{display:none;position:absolute;width:116%;height:25px;border-radius:999px;background:linear-gradient(90deg,var(--bad),var(--bd));transform:rotate(-35deg);box-shadow:0 0 0 9px rgba(255,255,255,.92),0 14px 30px rgba(224,67,79,.24)}
+.bad .slash{display:block}
+.status{font-size:clamp(2.3rem,5vw,4.1rem);font-weight:1000;line-height:.98;letter-spacing:-.05em;margin-top:8px}
+.good .status{color:var(--gd)}.bad .status{color:var(--bd)}
+.reason{max-width:650px;margin:14px 0 0;color:var(--muted);font-size:clamp(1.08rem,1.8vw,1.3rem);font-weight:850;line-height:1.4}
+.info{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:26px}
+.pill{padding:15px;border-radius:22px;background:rgba(255,255,255,.84);border:1px solid rgba(22,50,79,.07);box-shadow:0 9px 24px rgba(30,60,90,.06)}
+.pill small{display:block;text-transform:uppercase;letter-spacing:.06em;font-weight:900;color:#7a8ca0;font-size:.72rem;margin-bottom:4px}.pill b{font-size:1.05rem}
+.loader{width:96px;height:96px;border:10px solid rgba(40,90,140,.12);border-top-color:#3b7cff;border-radius:50%;animation:spin .9s linear infinite;margin-bottom:24px}@keyframes spin{to{transform:rotate(360deg)}}
+.loading-title{font-size:clamp(1.8rem,4vw,3rem);font-weight:1000;letter-spacing:-.04em}.loading-text{color:var(--muted);font-weight:800;margin-top:10px;font-size:1.08rem}
+.location{display:none;width:min(650px,100%);margin-top:22px;padding:16px;border-radius:24px;background:rgba(255,255,255,.82);border:1px solid rgba(22,50,79,.08)}.location.show{display:block}
+.search{display:flex;gap:10px}input{flex:1;min-width:0;border:2px solid #d6e1ec;border-radius:17px;padding:15px 17px;font:inherit;font-weight:850;outline:none;background:white}input:focus{border-color:#6da8ff;box-shadow:0 0 0 5px rgba(109,168,255,.16)}
+button{border:0;border-radius:17px;padding:15px 20px;font:inherit;font-weight:950;color:white;background:linear-gradient(135deg,#2453ff,#3a8dff);box-shadow:0 12px 25px rgba(36,83,255,.22);cursor:pointer}
+footer{text-align:center;margin-top:14px;color:#71859a;font-weight:750;font-size:.84rem}
+@media(max-width:900px){body{padding:14px}.card{min-height:650px;border-radius:32px;padding:24px}.info{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.card{min-height:590px;padding:18px}.info{grid-template-columns:1fr 1fr}.search{flex-direction:column}button{width:100%}}
+@media(orientation:landscape) and (min-width:900px){.card{min-height:590px}.bike-wrap{width:min(470px,54vw)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><div class="cloud c1"></div><div class="cloud c2"></div></div>
+<main class="app">
+<header><span class="badge">Amir · Fahrrad-Wetter</span><h1>Kann ich heute<br>Fahrrad fahren?</h1><p>Die Seite prüft das Wetter automatisch.</p></header>
+<section id="card" class="card" aria-live="polite">
+<div class="glow"></div>
+<div id="loading"><div class="loader"></div><div class="loading-title">Wetter wird geprüft …</div><div class="loading-text">Standort erlauben – dann siehst du sofort das Ergebnis.</div></div>
+<div id="result" class="result" hidden>
+<div id="state" class="state"></div>
+<div class="bike-wrap" aria-hidden="true">
+<svg class="bike" viewBox="0 0 420 290">
+<circle cx="95" cy="205" r="65"/><circle cx="325" cy="205" r="65"/>
+<path d="M95 205 165 205 212 132 275 205 325 205M165 205 135 120 205 120M135 120 112 120M212 132 250 95M235 96 275 96M212 132 165 205M212 132 275 205"/>
+</svg><div class="slash"></div></div>
+<div id="status" class="status"></div><p id="reason" class="reason"></p><div id="info" class="info"></div>
+</div>
+<div id="location" class="location"><div class="search"><input id="city" placeholder="Ort eingeben, z. B. Ludwigsburg" autocomplete="address-level2"><button id="go">Prüfen</button></div></div>
+</section>
+<footer>Live-Wetter über Open-Meteo · einfache Wetterhilfe für Kinder</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id),card=$("card"),loading=$("loading"),result=$("result"),state=$("state"),statusEl=$("status"),reason=$("reason"),info=$("info"),locationBox=$("location"),city=$("city"),go=$("go");
+const textCode=c=>c===0?"Klar":[1,2,3].includes(c)?"Wolkig":[45,48].includes(c)?"Nebel":[51,53,55,56,57].includes(c)?"Nieselregen":[61,63,65,66,67,80,81,82].includes(c)?"Regen":[71,73,75,77,85,86].includes(c)?"Schnee":[95,96,99].includes(c)?"Gewitter":"Wechselhaft";
+function decide(w,next){
+ const c=+w.weather_code||0,p=+w.precipitation||0,r=+w.rain||0,s=+w.showers||0,snow=+w.snowfall||0,wind=+w.wind_speed_10m||0,t=+w.temperature_2m||0;
+ const soonRain=next.some(x=>(+x.precipitation||0)>=.2 || (+x.precipitation_probability||0)>=60);
+ if([95,96,99].includes(c))return[false,"Gewitter","Heute lieber nicht – Gewitter ist zu gefährlich."];
+ if(snow>0||[71,73,75,77,85,86].includes(c))return[false,"Schnee oder Glätte","Heute lieber nicht – es kann rutschig sein."];
+ if(p>0||r>0||s>0||[51,53,55,56,57,61,63,65,66,67,80,81,82].includes(c)||soonRain)return[false,"Regen","Heute lieber nicht – es ist nass oder bald kommt Regen."];
+ if(wind>=30)return[false,"Starker Wind","Heute lieber nicht – der Wind ist zu stark."];
+ if(t<=2)return[false,"Sehr kalt","Heute lieber nicht – es ist sehr kalt."];
+ return[true,"Gutes Fahrrad-Wetter","Ja! Das Wetter passt gerade zum Fahrradfahren."];
+}
+function pill(a,b){return '<div class="pill"><small>'+a+'</small><b>'+b+'</b></div>'}
+function esc(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function render(w,next,place){
+ const d=decide(w,next);loading.hidden=true;result.hidden=false;card.className="card "+(d[0]?"good":"bad");
+ state.textContent=d[0]?"✅ Fahrrad geht":"⛔ Lieber nicht";statusEl.textContent=d[0]?"Ja, Fahrrad fahren!":"Heute lieber nicht.";reason.textContent=d[2];
+ info.innerHTML=pill("Ort",esc(place))+pill("Temperatur",Math.round(+w.temperature_2m)+" °C")+pill("Wind",Math.round(+w.wind_speed_10m)+" km/h")+pill("Wetter",textCode(+w.weather_code));
+}
+async function weather(lat,lon,place){
+ const u=new URL("https://api.open-meteo.com/v1/forecast");u.search=new URLSearchParams({latitude:lat,longitude:lon,current:"temperature_2m,precipitation,rain,showers,snowfall,weather_code,wind_speed_10m",hourly:"precipitation,precipitation_probability",forecast_hours:"3",timezone:"auto"});
+ const res=await fetch(u);if(!res.ok)throw Error("Wetter nicht verfügbar");const d=await res.json();
+ const next=(d.hourly?.time||[]).map((_,i)=>({precipitation:d.hourly.precipitation?.[i],precipitation_probability:d.hourly.precipitation_probability?.[i]})).slice(0,3);
+ render(d.current,next,place);
+}
+function fallback(msg){loading.innerHTML='<div class="loading-title">Wo bist du?</div><div class="loading-text">'+msg+'</div>';locationBox.classList.add("show")}
+async function search(){
+ const q=city.value.trim();if(!q)return;go.disabled=true;go.textContent="…";
+ try{const u=new URL("https://geocoding-api.open-meteo.com/v1/search");u.search=new URLSearchParams({name:q,count:"1",language:"de",format:"json"});const r=await fetch(u),d=await r.json(),h=d.results?.[0];if(!h)throw Error("Ort nicht gefunden");await weather(h.latitude,h.longitude,[h.name,h.admin1].filter(Boolean).join(", "));locationBox.classList.remove("show")}catch(e){alert(e.message||"Ort nicht gefunden")}finally{go.disabled=false;go.textContent="Prüfen"}
+}
+go.onclick=search;city.addEventListener("keydown",e=>{if(e.key==="Enter")search()});
+if("geolocation"in navigator)navigator.geolocation.getCurrentPosition(p=>weather(p.coords.latitude,p.coords.longitude,"Bei dir").catch(()=>fallback("Wetter konnte nicht geladen werden. Gib deinen Ort ein.")),()=>fallback("Standort nicht freigegeben. Gib deinen Ort ein."),{enableHighAccuracy:false,timeout:8000,maximumAge:600000});else fallback("Gib deinen Ort ein.");
+</script>
+</body>
+</html>
