@@ -227,7 +227,7 @@ body[data-state="bad"] .bike { --frame-a: #94a3b8; --frame-b: #64748b; }
 .bike .lamp { fill: #fff7c2; stroke: #eab308; stroke-width: 4; }
 .bike .beam { fill: rgba(253, 224, 71, .35); opacity: 0; transition: opacity .5s ease; }
 .bike .tail { fill: #ef4444; }
-.bike .reflector { fill: #f59e0b; }
+.bike .crank .reflector { fill: #f59e0b; }
 .bike .speed { stroke: var(--accent); stroke-width: 6; stroke-linecap: round; opacity: 0; transition: opacity .5s ease; }
 .bike .wheel { transform-box: fill-box; transform-origin: center; }
 .bike .crank { transform-box: view-box; transform-origin: 270px 270px; }
