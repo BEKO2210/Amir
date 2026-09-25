@@ -1,0 +1,15 @@
+{
+  "name": "Amirs Fahrrad-Wetter",
+  "short_name": "Fahrrad-Wetter",
+  "description": "Auf einen Blick sehen, ob heute Fahrrad-Wetter ist.",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#eef6ff",
+  "theme_color": "#2563eb",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
